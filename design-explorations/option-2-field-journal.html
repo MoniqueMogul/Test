@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FarmQuest — Field Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f7efdd;
+    --paper-2: #fdf8ec;
+    --ink: #3a2f22;
+    --ink-soft: #6d5f4b;
+    --red: #b5442e;
+    --wheat: #d9a441;
+    --leaf: #5a7d4a;
+    --rule: #d8c9a8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    background: var(--paper);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, #0000000a 28px),
+      radial-gradient(800px 400px at 90% 0%, #fff3d64d, transparent 60%);
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 0 24px; }
+  .hand { font-family: 'Caveat', cursive; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 26px 0; border-bottom: 3px double var(--rule); }
+  .logo { font-weight: 900; font-size: 24px; letter-spacing: .5px; color: var(--ink); text-decoration: none; }
+  .logo .leaf { color: var(--leaf); }
+  .nav-links { display: flex; gap: 26px; align-items: center; }
+  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 15.5px; font-style: italic; }
+  .nav-links a:hover { color: var(--red); }
+  .btn {
+    display: inline-block; padding: 13px 26px; text-decoration: none; font-weight: 600; font-size: 15.5px;
+    border-radius: 4px; transition: transform .12s ease;
+  }
+  .btn-red { background: var(--red); color: var(--paper-2); box-shadow: 3px 3px 0 var(--ink); }
+  .btn-red:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+  .btn-line { border: 1.5px solid var(--ink); color: var(--ink); }
+  .btn-line:hover { background: var(--ink); color: var(--paper-2); }
+
+  /* HERO */
+  .hero { text-align: center; padding: 76px 0 56px; position: relative; }
+  .hero .hand-note {
+    font-size: 26px; color: var(--red); transform: rotate(-2deg); display: inline-block; margin-bottom: 10px;
+  }
+  h1 {
+    font-size: clamp(40px, 6vw, 68px); font-weight: 900; line-height: 1.06;
+    letter-spacing: -1px; max-width: 18ch; margin: 0 auto;
+  }
+  h1 em { font-style: italic; font-weight: 400; color: var(--leaf); }
+  .hero p.lead { max-width: 56ch; margin: 26px auto 34px; font-size: 19px; color: var(--ink-soft); }
+  .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  /* STAMP */
+  .stamp {
+    position: absolute; top: 48px; right: 4%; width: 128px; height: 128px; border-radius: 50%;
+    border: 3px solid var(--red); color: var(--red); display: grid; place-items: center;
+    text-align: center; font-weight: 900; font-size: 12.5px; line-height: 1.35; letter-spacing: 1px;
+    text-transform: uppercase; transform: rotate(12deg); padding: 14px; opacity: .85;
+    box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 5px var(--red);
+  }
+
+  /* POSTCARDS */
+  section { padding: 64px 0; }
+  .sec-head { text-align: center; margin-bottom: 48px; }
+  .sec-head .hand-note { font-size: 24px; color: var(--leaf); display: block; transform: rotate(-1.5deg); }
+  .sec-head h2 { font-size: clamp(28px, 3.6vw, 40px); font-weight: 900; letter-spacing: -.5px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .card {
+    background: var(--paper-2); border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 26px; box-shadow: 5px 5px 0 #3a2f2226; position: relative;
+  }
+  .card:nth-child(1) { transform: rotate(-1.4deg); }
+  .card:nth-child(2) { transform: rotate(0.8deg); margin-top: 16px; }
+  .card:nth-child(3) { transform: rotate(-0.6deg); }
+  .card .chapter { font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600; color: var(--red); margin-bottom: 10px; }
+  .card h3 { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+  .card p { font-size: 15px; color: var(--ink-soft); }
+  .card .art {
+    height: 96px; margin: -26px -26px 20px; border-bottom: 1.5px solid var(--ink);
+    border-radius: 5px 5px 0 0; display: grid; place-items: center; font-size: 42px;
+  }
+  .card:nth-child(1) .art { background: #e9dfc3; }
+  .card:nth-child(2) .art { background: #dde4cd; }
+  .card:nth-child(3) .art { background: #f0d9c0; }
+  .card .pin {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    width: 22px; height: 22px; background: var(--wheat); border: 1.5px solid var(--ink); border-radius: 50%;
+    box-shadow: 2px 2px 0 #3a2f2233;
+  }
+
+  /* EXCERPT */
+  .excerpt {
+    max-width: 720px; margin: 0 auto; background: var(--paper-2);
+    border: 1.5px solid var(--ink); border-radius: 6px; padding: 44px 48px;
+    box-shadow: 6px 6px 0 #3a2f2226; position: relative;
+  }
+  .excerpt::before {
+    content: "❝"; position: absolute; top: 16px; left: 22px; font-size: 54px; color: var(--wheat); line-height: 1;
+  }
+  .excerpt p.body { font-size: 18.5px; font-style: italic; color: var(--ink); margin-bottom: 22px; }
+  .excerpt .choices { display: grid; gap: 10px; }
+  .excerpt .choice {
+    padding: 12px 18px; border: 1.5px dashed var(--ink-soft); border-radius: 4px;
+    font-size: 15.5px; font-weight: 600; background: var(--paper);
+  }
+  .excerpt .choice.picked { border-style: solid; border-color: var(--red); color: var(--red); background: #b5442e0d; }
+  .excerpt .caption { margin-top: 18px; font-size: 13.5px; color: var(--ink-soft); text-align: right; }
+
+  /* PROMISES */
+  .promises { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; background: var(--paper-2); }
+  .promise { padding: 30px 34px; border-bottom: 1.5px solid var(--rule); }
+  .promise:nth-child(odd) { border-right: 1.5px solid var(--rule); }
+  .promise:nth-last-child(-n+2) { border-bottom: none; }
+  .promise h3 { font-size: 18px; font-weight: 900; margin-bottom: 6px; }
+  .promise h3 .tick { color: var(--leaf); margin-right: 8px; }
+  .promise p { font-size: 14.5px; color: var(--ink-soft); }
+
+  /* CTA */
+  .cta { text-align: center; padding: 70px 0 30px; }
+  .cta h2 { font-size: clamp(28px, 3.6vw, 40px); font-weight: 900; margin-bottom: 12px; }
+  .cta p { color: var(--ink-soft); margin-bottom: 30px; font-size: 17px; }
+  .cta .hand-note { font-size: 24px; color: var(--red); display: block; margin-top: 22px; transform: rotate(-2deg); }
+  footer { border-top: 3px double var(--rule); margin-top: 56px; padding: 30px 0 44px; text-align: center; color: var(--ink-soft); font-size: 14px; font-style: italic; }
+
+  @media (max-width: 860px) {
+    .cards { grid-template-columns: 1fr; }
+    .card:nth-child(2) { margin-top: 0; }
+    .promises { grid-template-columns: 1fr; }
+    .promise:nth-child(odd) { border-right: none; }
+    .stamp { display: none; }
+    .nav-links a:not(.btn) { display: none; }
+    .excerpt { padding: 36px 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <a class="logo" href="#">Farm<span class="leaf">Quest</span></a>
+    <div class="nav-links">
+      <a href="#story">The Story</a>
+      <a href="#promises">For Grown-ups</a>
+      <a href="#pilot">The Pilot</a>
+      <a class="btn btn-red" href="#pilot">Join the Pilot</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="stamp">Teacher<br>Reviewed<br>★ Every Story ★</div>
+    <span class="hand hand-note">a field trip, rewritten as an adventure</span>
+    <h1>Every farm has a story. <em>Your class gets to live one.</em></h1>
+    <p class="lead">FarmQuest is an interactive story for grades 6–12 that begins in the classroom, unfolds chapter by chapter at a real local farm, and ends back at school — shaped entirely by the choices your students make along the way.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-red" href="#pilot">Bring it to your class</a>
+      <a class="btn btn-line" href="#story">Read a sample chapter</a>
+    </div>
+  </header>
+
+  <section id="chapters">
+    <div class="sec-head">
+      <span class="hand hand-note">how the journey goes</span>
+      <h2>Three chapters, three places</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="pin"></div>
+        <div class="art">📖</div>
+        <div class="chapter">Chapter One · The Classroom</div>
+        <h3>Something's wrong at Hilltop Farm</h3>
+        <p>On Chromebooks, students meet the farm, pick their roles, and make the first choices of the mystery. The trip ahead becomes a story they're already inside.</p>
+      </div>
+      <div class="card">
+        <div class="pin"></div>
+        <div class="art">🚜</div>
+        <div class="chapter">Chapter Two · The Farm</div>
+        <h3>The clues are real</h3>
+        <p>At the barn, the pasture, the market stand — QR signs unlock the next pages. The story asks students to look up from the screen: the answers are standing right in front of them.</p>
+      </div>
+      <div class="card">
+        <div class="pin"></div>
+        <div class="art">🌾</div>
+        <div class="chapter">Chapter Three · Back at School</div>
+        <h3>Every group ends differently</h3>
+        <p>The finale resolves by the choices each group made. A reflection chapter ties the tale to what they saw, touched, and learned at the farm.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="sec-head">
+      <span class="hand hand-note">from an actual story pack</span>
+      <h2>A page from the field</h2>
+    </div>
+    <div class="excerpt">
+      <p class="body">The feed chart on the barn wall lists three rations, but Denise only ever spoke of two. Rosa runs her finger down the column and stops at the third line. “Heifers, evening feed,” she reads. “So who — or what — is the third ration for?”</p>
+      <div class="choices">
+        <div class="choice picked">✓ Compare the chart with the ledger you found in Chapter 2</div>
+        <div class="choice">Ask the farmhand by the milking parlor</div>
+        <div class="choice">Photograph the chart and move on to the creamery</div>
+      </div>
+      <p class="caption">— “The Missing Ledger,” Chapter 4 · unlocked at the Dairy Barn · reading level: grades 6–8</p>
+    </div>
+  </section>
+
+  <section id="promises">
+    <div class="sec-head">
+      <span class="hand hand-note">for teachers &amp; parents</span>
+      <h2>Old-fashioned promises</h2>
+    </div>
+    <div class="promises">
+      <div class="promise">
+        <h3><span class="tick">✓</span>Read before it's played</h3>
+        <p>Stories are drafted with AI, then read and approved by the teacher — every branch, every page — before any student sees a word.</p>
+      </div>
+      <div class="promise">
+        <h3><span class="tick">✓</span>No student accounts</h3>
+        <p>Students join with a simple group code. No names, no emails, no data trail. Parents can read every page their child read.</p>
+      </div>
+      <div class="promise">
+        <h3><span class="tick">✓</span>Works without signal</h3>
+        <p>The farm chapters are tucked into students' phones before the trip, so the story never depends on a bar of reception.</p>
+      </div>
+      <div class="promise">
+        <h3><span class="tick">✓</span>Curriculum underneath</h3>
+        <p>Agriculture science, food systems, sustainability, and rural careers — folded into the plot, matched to the grade level you teach.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="pilot">
+    <h2>The pilot journal has a few blank pages left</h2>
+    <p>We're partnering with a handful of schools and local farms this year, free of charge. Write your class into the story.</p>
+    <a class="btn btn-red" href="#">Request a Pilot Spot</a>
+    <span class="hand hand-note">— we'll bring the QR signs, you bring the readers</span>
+  </section>
+
+  <footer>FarmQuest · Stories that grow where food does · Pilot season 2026–27</footer>
+</div>
+
+</body>
+</html>

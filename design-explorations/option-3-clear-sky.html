@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FarmQuest — Clear Sky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f6f8f6;
+    --ink: #101828;
+    --muted: #55606e;
+    --line: #e6e9ec;
+    --green: #17803d;
+    --green-soft: #e8f4ec;
+    --amber: #b45309;
+    --amber-soft: #fdf3e3;
+    --blue: #1d4ed8;
+    --blue-soft: #e9effc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; font-size: 16px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .logo { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 19px; color: var(--ink); text-decoration: none; letter-spacing: -.3px; }
+  .logo-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--green); display: grid; place-items: center; color: #fff; font-size: 15px; }
+  .nav-links { display: flex; gap: 26px; align-items: center; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; }
+  .nav-links a:hover { color: var(--ink); }
+  .btn { display: inline-block; padding: 11px 22px; border-radius: 8px; font-weight: 600; font-size: 14.5px; text-decoration: none; }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:hover { background: #12662f; }
+  .btn-line { border: 1px solid var(--line); color: var(--ink); background: #fff; }
+  .btn-line:hover { border-color: #c9ced4; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 84px 0 56px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px;
+    background: var(--green-soft); color: var(--green); font-size: 13px; font-weight: 600; margin-bottom: 24px;
+  }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+  h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 800; letter-spacing: -1.8px; line-height: 1.1; max-width: 21ch; margin: 0 auto; }
+  h1 .green { color: var(--green); }
+  .hero p.lead { max-width: 58ch; margin: 22px auto 34px; font-size: 18px; color: var(--muted); }
+  .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .hero-fine { margin-top: 16px; font-size: 13px; color: var(--muted); }
+
+  /* STATS */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-top: 56px; }
+  .stat { padding: 24px; text-align: center; border-right: 1px solid var(--line); background: #fff; }
+  .stat:last-child { border-right: none; }
+  .stat .num { font-size: 26px; font-weight: 800; letter-spacing: -1px; color: var(--green); }
+  .stat .lbl { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* HOW IT WORKS */
+  section { padding: 76px 0; }
+  .sec-head { max-width: 620px; margin-bottom: 44px; }
+  .sec-head .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+  .sec-head h2 { font-size: clamp(26px, 3.2vw, 36px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; }
+  .sec-head p { color: var(--muted); margin-top: 12px; font-size: 16.5px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .step { border: 1px solid var(--line); border-radius: 14px; padding: 26px; background: #fff; }
+  .step .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; margin-bottom: 16px; }
+  .step:nth-child(1) .tag { background: var(--blue-soft); color: var(--blue); }
+  .step:nth-child(2) .tag { background: var(--green-soft); color: var(--green); }
+  .step:nth-child(3) .tag { background: var(--amber-soft); color: var(--amber); }
+  .step h3 { font-size: 17.5px; font-weight: 700; margin-bottom: 8px; letter-spacing: -.3px; }
+  .step p { font-size: 14.5px; color: var(--muted); }
+
+  /* WORKFLOW PANEL */
+  .panel { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 18px; padding: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center; }
+  .panel h2 { font-size: clamp(24px, 3vw, 32px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 14px; }
+  .panel > div > p { color: var(--muted); font-size: 15.5px; margin-bottom: 22px; }
+  .checklist { list-style: none; display: grid; gap: 12px; }
+  .checklist li { display: flex; gap: 10px; font-size: 15px; font-weight: 500; }
+  .checklist .chk { flex: 0 0 22px; height: 22px; border-radius: 50%; background: var(--green-soft); color: var(--green); display: grid; place-items: center; font-size: 12px; font-weight: 800; }
+
+  /* DASHBOARD MOCK */
+  .dash { background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 40px #10182814; overflow: hidden; }
+  .dash-top { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .dash-top .title { font-size: 13.5px; font-weight: 700; }
+  .dash-top .status { font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--amber-soft); color: var(--amber); }
+  .dash-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 18px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  .dash-row:last-child { border-bottom: none; }
+  .dash-row .lft { display: flex; gap: 10px; align-items: center; font-weight: 500; }
+  .dash-row .ico { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; font-size: 13px; background: var(--bg-soft); }
+  .chip { font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .chip.ok { background: var(--green-soft); color: var(--green); }
+  .chip.wait { background: var(--blue-soft); color: var(--blue); }
+  .dash-cta { display: block; margin: 14px 18px 16px; text-align: center; padding: 10px; border-radius: 8px; background: var(--green); color: #fff; font-size: 13.5px; font-weight: 700; text-decoration: none; }
+
+  /* AUDIENCE */
+  .aud-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .aud { border: 1px solid var(--line); border-radius: 14px; padding: 26px; }
+  .aud .who { font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+  .aud h3 { font-size: 17px; font-weight: 700; letter-spacing: -.3px; margin-bottom: 8px; }
+  .aud p { font-size: 14.5px; color: var(--muted); }
+
+  /* CTA */
+  .cta { text-align: center; background: var(--ink); border-radius: 18px; padding: 60px 40px; color: #fff; }
+  .cta h2 { font-size: clamp(24px, 3vw, 34px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+  .cta p { color: #b9c0ca; margin-bottom: 28px; max-width: 52ch; margin-inline: auto; }
+  .cta .btn-green { padding: 13px 28px; }
+  footer { padding: 32px 0 44px; display: flex; justify-content: space-between; color: var(--muted); font-size: 13.5px; border-top: 1px solid var(--line); margin-top: 24px; }
+
+  @media (max-width: 860px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    .steps, .aud-grid { grid-template-columns: 1fr; }
+    .panel { grid-template-columns: 1fr; padding: 28px; }
+    .nav-links a:not(.btn) { display: none; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <a class="logo" href="#"><span class="logo-mark">⟠</span>FarmQuest</a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#teachers">For teachers</a>
+      <a href="#audience">Who it's for</a>
+      <a class="btn btn-line" href="#">Sign in</a>
+      <a class="btn btn-green" href="#pilot">Join the pilot</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="pill"><span class="dot"></span>Free pilot · 2026–27 school year · Grades 6–12</div>
+    <h1>Turn your farm field trip into a <span class="green">choose-your-own</span> learning adventure</h1>
+    <p class="lead">FarmQuest wraps a real visit to a local farm in an interactive branching story. Students prep in class, unlock chapters by scanning QR codes at farm stations, and finish with a reflection lesson — all in one web app, reviewed by you before anyone plays.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-green" href="#pilot">Request pilot access</a>
+      <a class="btn btn-line" href="#how">See how it works</a>
+    </div>
+    <p class="hero-fine">No student accounts · No installs · Works offline at the farm</p>
+
+    <div class="stats">
+      <div class="stat"><div class="num">&lt;45 min</div><div class="lbl">Teacher prep, signup to trip-ready</div></div>
+      <div class="stat"><div class="num">100%</div><div class="lbl">Of story content teacher-approved</div></div>
+      <div class="stat"><div class="num">0</div><div class="lbl">Student accounts or personal data</div></div>
+      <div class="stat"><div class="num">3</div><div class="lbl">Phases: before, during, after the trip</div></div>
+    </div>
+  </header>
+
+  <section id="how">
+    <div class="sec-head">
+      <div class="eyebrow">How it works</div>
+      <h2>One story arc across the whole trip</h2>
+      <p>The field trip stops being an island. FarmQuest connects it to the days before and after, so the learning compounds.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="tag">Before · in class</span>
+        <h3>Launch the story on Chromebooks</h3>
+        <p>Students join with a group code, meet the characters, and make opening choices. The farm chapters quietly download to their phones for offline use.</p>
+      </div>
+      <div class="step">
+        <span class="tag">During · at the farm</span>
+        <h3>Scan stations, unlock chapters</h3>
+        <p>Permanent QR signs at the barn, field, and market stand open location-specific chapters. Choices reference real things students can see and check.</p>
+      </div>
+      <div class="step">
+        <span class="tag">After · back in class</span>
+        <h3>Finish with a branching finale</h3>
+        <p>Each group's ending reflects their choices. A built-in reflection chapter and CSV export turn the trip into assessable learning.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="teachers">
+    <div class="panel">
+      <div>
+        <div class="sec-head" style="margin-bottom:0">
+          <div class="eyebrow">Built for teachers</div>
+          <h2>You approve every word before students play</h2>
+        </div>
+        <p>AI drafts a branching story pack customized to your farm, grade band, and subject focus — overnight. You review the full story tree, regenerate any section in one click, and approve. Until you do, students see nothing.</p>
+        <ul class="checklist">
+          <li><span class="chk">✓</span>Aligned to ag science, food systems, sustainability &amp; careers</li>
+          <li><span class="chk">✓</span>Reading level matched to grades 6–8 or 9–12</li>
+          <li><span class="chk">✓</span>Printable trip sheet, station map &amp; QR signs included</li>
+          <li><span class="chk">✓</span>Live check-in view keeps groups moving on trip day</li>
+        </ul>
+      </div>
+      <div class="dash" aria-hidden="true">
+        <div class="dash-top">
+          <span class="title">Story pack · Hilltop Farm · Grade 7</span>
+          <span class="status">Awaiting approval</span>
+        </div>
+        <div class="dash-row"><span class="lft"><span class="ico">📘</span>Ch. 1–2 · Classroom setup</span><span class="chip ok">Reviewed</span></div>
+        <div class="dash-row"><span class="lft"><span class="ico">🐄</span>Ch. 3 · The Dairy Barn</span><span class="chip ok">Reviewed</span></div>
+        <div class="dash-row"><span class="lft"><span class="ico">🌱</span>Ch. 4 · The Seed Shed</span><span class="chip wait">Regenerating…</span></div>
+        <div class="dash-row"><span class="lft"><span class="ico">🧀</span>Ch. 5 · The Creamery</span><span class="chip ok">Reviewed</span></div>
+        <div class="dash-row"><span class="lft"><span class="ico">🏁</span>Ch. 6–7 · Finale &amp; reflection</span><span class="chip ok">Reviewed</span></div>
+        <a class="dash-cta" href="#">Approve pack for students</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="audience">
+    <div class="sec-head">
+      <div class="eyebrow">Who it's for</div>
+      <h2>Three sides of the same trip</h2>
+    </div>
+    <div class="aud-grid">
+      <div class="aud">
+        <div class="who">Students · 6–12</div>
+        <h3>A game, not a worksheet</h3>
+        <p>Real choices, real consequences, and clues hidden in the actual farm. Groups of 2–4 share one phone, so nobody's left out.</p>
+      </div>
+      <div class="aud">
+        <div class="who">Teachers</div>
+        <h3>Curriculum without the prep</h3>
+        <p>Under 45 minutes from signup to an approved, standards-relevant story pack — with every logistics artifact generated for you.</p>
+      </div>
+      <div class="aud">
+        <div class="who">Farms</div>
+        <h3>Set up once, host forever</h3>
+        <p>A 30-minute onboarding and a set of weatherproof QR signs. Every class after that runs itself — and schools come back.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pilot">
+    <div class="cta">
+      <h2>Join the 2026–27 pilot cohort</h2>
+      <p>We're onboarding 2–5 schools and up to 3 local farms this year, completely free. If you run farm field trips — or host them — we'd like to build this with you.</p>
+      <a class="btn btn-green" href="#">Request pilot access</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 FarmQuest — Stories that grow where food does</span>
+    <span>Privacy · For parents · Contact</span>
+  </footer>
+</div>
+
+</body>
+</html>
