@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FarmQuest — Story Teller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Bungee&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c1a12;
+    --bg-2: #12241a;
+    --card: #162c20;
+    --line: #24402f;
+    --gold: #f5b942;
+    --gold-soft: #f8d183;
+    --green: #4cc776;
+    --ink: #eef5ef;
+    --muted: #9db8a6;
+    --red: #e8604c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #1a3a26 0%, transparent 60%),
+      radial-gradient(900px 500px at -10% 40%, #142e1e 0%, transparent 55%),
+      var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
+
+  header { text-align: center; padding: 40px 0 28px; }
+  .logo { font-family: 'Bungee', 'Arial Black', sans-serif; font-size: 30px; color: var(--gold); letter-spacing: 1px; }
+  .logo span { color: var(--green); }
+  .tagline { color: var(--muted); font-size: 15px; margin-top: 6px; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    padding: 26px; margin-bottom: 20px;
+  }
+  .card h2 { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 18px; }
+
+  label { display: block; font-size: 13.5px; font-weight: 600; color: var(--muted); margin: 16px 0 6px; }
+  label:first-of-type { margin-top: 0; }
+  input[type=text], input[type=password], textarea, select {
+    width: 100%; padding: 12px 14px; border-radius: 10px; font-size: 15px;
+    background: var(--bg-2); border: 1px solid var(--line); color: var(--ink);
+    font-family: inherit; outline: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--gold); }
+  textarea { min-height: 84px; resize: vertical; }
+
+  .chips { display: flex; gap: 10px; flex-wrap: wrap; }
+  .chip {
+    padding: 9px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600; cursor: pointer;
+    background: var(--bg-2); border: 1px solid var(--line); color: var(--muted); user-select: none;
+  }
+  .chip.on { border-color: var(--gold); color: var(--gold-soft); box-shadow: 0 0 14px #f5b94226; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+
+  .btn {
+    display: inline-block; width: 100%; padding: 15px 24px; border-radius: 12px; border: none;
+    font-family: inherit; font-weight: 700; font-size: 16px; letter-spacing: .3px; cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-gold {
+    background: linear-gradient(180deg, var(--gold-soft), var(--gold));
+    color: #2a1d04; box-shadow: 0 6px 20px #f5b94233;
+  }
+  .btn-gold:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 28px #f5b94255; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 12px; margin-top: 18px; }
+  .btn-ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+  .btn-ghost:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+
+  details.settings { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 14px; }
+  details.settings summary { cursor: pointer; font-size: 13.5px; color: var(--muted); font-weight: 600; }
+  .keynote { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+  .keynote b { color: var(--gold-soft); }
+
+  /* STORY VIEW */
+  #storyCard { display: none; }
+  .status {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green);
+  }
+  .status .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
+  .status.busy .dot { animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.7); } }
+  #storyTitle { font-family: 'Bungee', 'Arial Black', sans-serif; font-size: 24px; color: var(--gold); margin-bottom: 14px; line-height: 1.25; }
+  #storyText { font-size: 16.5px; white-space: pre-wrap; }
+  #storyText::after { content: "▋"; color: var(--gold); animation: pulse 1s infinite; }
+  #storyText.done::after { content: ""; }
+
+  .audio-bar {
+    display: none; align-items: center; gap: 12px; margin-top: 22px; padding: 14px 16px;
+    border-radius: 12px; background: var(--bg-2); border: 1px dashed var(--green);
+  }
+  .audio-bar.show { display: flex; }
+  .play-btn {
+    flex: 0 0 46px; height: 46px; border-radius: 50%; border: 2px solid var(--gold); cursor: pointer;
+    background: var(--bg); color: var(--gold); font-size: 17px; box-shadow: 0 0 20px #f5b94233;
+  }
+  .audio-meta { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .audio-meta b { color: var(--green); display: block; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+  progress { flex: 1; height: 6px; accent-color: var(--gold); }
+
+  .error {
+    display: none; margin-top: 16px; padding: 13px 16px; border-radius: 10px; font-size: 14px;
+    background: #2a1512; border: 1px solid var(--red); color: #f3b0a5;
+  }
+  .error.show { display: block; }
+
+  /* SHELF */
+  .shelf-item {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 13px 4px; border-bottom: 1px solid var(--line); font-size: 14.5px;
+  }
+  .shelf-item:last-child { border-bottom: none; }
+  .shelf-item .t { font-weight: 600; }
+  .shelf-item .m { color: var(--muted); font-size: 12.5px; }
+  .shelf-item button {
+    padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg-2);
+    color: var(--gold-soft); font-family: inherit; font-weight: 700; font-size: 12.5px; cursor: pointer;
+    white-space: nowrap;
+  }
+  .shelf-item button:hover { border-color: var(--gold); }
+  #shelfEmpty { color: var(--muted); font-size: 14px; }
+
+  footer { text-align: center; color: #5f7a68; font-size: 12.5px; margin-top: 36px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">FARM<span>QUEST</span></div>
+    <div class="tagline">Every farm visit becomes a story worth telling.</div>
+  </header>
+
+  <!-- SETUP -->
+  <section class="card" id="setupCard">
+    <h2>Chapter Zero · Set the scene</h2>
+
+    <div class="row">
+      <div>
+        <label for="name">Student's first name</label>
+        <input type="text" id="name" placeholder="e.g., Rosa" maxlength="30" autocomplete="off">
+      </div>
+      <div>
+        <label for="band">Grade band</label>
+        <select id="band">
+          <option value="middle school (grades 6-8)">Middle school · 6–8</option>
+          <option value="high school (grades 9-12)">High school · 9–12</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Story theme</label>
+    <div class="chips" id="themes">
+      <span class="chip on" data-theme="life on a working farm — animals, crops, seasons, and the science behind them">🚜 Farming</span>
+      <span class="chip" data-theme="food insecurity and food access — handled with empathy, dignity, and hope, showing how communities and agriculture can be part of the solution">🥕 Food insecurity</span>
+      <span class="chip" data-theme="agricultural leadership — a young person stepping up, FFA-style: organizing, problem-solving, and leading others in an ag community">🌱 Ag leadership</span>
+    </div>
+
+    <label for="exp">Their farm experience (what did they see, do, or feel?)</label>
+    <textarea id="exp" placeholder="e.g., We visited Hilltop Farm — she got to bottle-feed a calf, saw the milking parlor, and asked a hundred questions about how the feed is measured."></textarea>
+
+    <div class="row" style="margin-top:16px">
+      <div>
+        <label for="voice">Narrator voice</label>
+        <select id="voice">
+          <option value="fable" selected>Fable — animated storyteller</option>
+          <option value="nova">Nova — bright &amp; upbeat</option>
+          <option value="ballad">Ballad — warm &amp; dramatic</option>
+          <option value="ash">Ash — calm &amp; steady</option>
+        </select>
+      </div>
+      <div>
+        <label>&nbsp;</label>
+        <button class="btn btn-gold" id="goBtn">✨ Tell the story</button>
+      </div>
+    </div>
+
+    <details class="settings" id="keyBox">
+      <summary>🔑 OpenAI API key</summary>
+      <label for="key">Your API key</label>
+      <input type="password" id="key" placeholder="sk-..." autocomplete="off">
+      <p class="keynote">Stored <b>only in this browser</b> (localStorage) and sent <b>only to api.openai.com</b>. It is never uploaded anywhere else — anyone deploying this page uses their own key.</p>
+    </details>
+
+    <div class="error" id="setupErr"></div>
+  </section>
+
+  <!-- STORY -->
+  <section class="card" id="storyCard">
+    <div class="status busy" id="status"><span class="dot"></span><span id="statusText">Writing your story…</span></div>
+    <div id="storyTitle"></div>
+    <div id="storyText"></div>
+
+    <div class="audio-bar" id="audioBar">
+      <button class="play-btn" id="playBtn" title="Play / pause">▶</button>
+      <div class="audio-meta"><b>Narration</b><span id="audioTime">0:00</span></div>
+      <progress id="audioProg" value="0" max="1"></progress>
+    </div>
+
+    <div class="error" id="storyErr"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="replayBtn" disabled>↻ Replay narration</button>
+      <button class="btn btn-ghost" id="newBtn">＋ New story</button>
+    </div>
+  </section>
+
+  <!-- SHELF -->
+  <section class="card" id="shelfCard">
+    <h2>Story shelf</h2>
+    <div id="shelf"><p id="shelfEmpty">Stories you generate are saved here (in this browser) so you can read and replay them later.</p></div>
+  </section>
+
+  <footer>FARMQUEST MVP · stories are AI-generated — read along with your student · audio &amp; text stay in your browser</footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const OPENAI = "https://api.openai.com/v1";
+  const state = { audio: null, audioUrl: null, story: "", title: "", busy: false };
+
+  /* ---------- key handling (browser-only, never in the repo) ---------- */
+  const keyInput = $("key");
+  keyInput.value = localStorage.getItem("fq_key") || "";
+  keyInput.addEventListener("change", () => localStorage.setItem("fq_key", keyInput.value.trim()));
+  const getKey = () => (keyInput.value || "").trim();
+
+  /* ---------- theme chips ---------- */
+  let theme = document.querySelector(".chip.on").dataset.theme;
+  $("themes").addEventListener("click", (e) => {
+    const c = e.target.closest(".chip");
+    if (!c) return;
+    document.querySelectorAll(".chip").forEach((x) => x.classList.remove("on"));
+    c.classList.add("on");
+    theme = c.dataset.theme;
+  });
+
+  /* ---------- helpers ---------- */
+  const showErr = (el, msg) => { el.textContent = msg; el.classList.add("show"); };
+  const clearErr = (el) => el.classList.remove("show");
+  const setStatus = (txt, busy) => { $("statusText").textContent = txt; $("status").classList.toggle("busy", !!busy); };
+  const fmt = (s) => (isFinite(s) ? Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0") : "0:00");
+
+  async function apiError(res) {
+    let msg = res.status + " " + res.statusText;
+    try {
+      const j = await res.json();
+      if (j.error && j.error.message) msg = j.error.message;
+    } catch (_) {}
+    if (res.status === 401) msg = "That API key was rejected (401). Check the key in 🔑 settings.";
+    if (res.status === 429) msg = "Rate limited or out of quota (429). Wait a moment and try again.";
+    return new Error(msg);
+  }
+
+  /* ---------- story generation (streamed) ---------- */
+  function buildPrompt(name, band, exp) {
+    const system = [
+      "You are the FarmQuest storyteller: you turn a real student's farm experience into a short second-person adventure story starring them.",
+      "Audience: a " + band + " student, plus their parents and teachers. The story must be age-appropriate, wholesome, and engaging for K-12 — never frightening, violent, romantic, or graphic. Sensitive topics (like food insecurity) are handled honestly but with empathy, dignity, and hope.",
+      "Style: vivid, warm, a little playful; short paragraphs; sensory detail drawn from the student's real experience; an uplifting ending plus ONE reflection question addressed to the student.",
+      "Length: 220-320 words.",
+      "Format: first line is a short story title (no quotes, no markdown symbols, no 'Title:' prefix), then a blank line, then the story."
+    ].join(" ");
+    const user =
+      "Student first name: " + name +
+      "\nTheme: " + theme +
+      "\nTheir real farm experience to weave in: " + (exp || "They visited a local farm for the first time.");
+    return { system, user };
+  }
+
+  async function generateStory(name, band, exp) {
+    const p = buildPrompt(name, band, exp);
+    const res = await fetch(OPENAI + "/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + getKey() },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        stream: true,
+        temperature: 0.9,
+        max_tokens: 700,
+        messages: [
+          { role: "system", content: p.system },
+          { role: "user", content: p.user }
+        ]
+      })
+    });
+    if (!res.ok) throw await apiError(res);
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = "";
+    let full = "";
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split("\n");
+      buf = lines.pop();
+      for (const line of lines) {
+        const m = line.trim();
+        if (!m.startsWith("data:")) continue;
+        const payload = m.slice(5).trim();
+        if (payload === "[DONE]") continue;
+        try {
+          const j = JSON.parse(payload);
+          const delta = j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content;
+          if (delta) { full += delta; renderStory(full, false); }
+        } catch (_) {}
+      }
+    }
+    renderStory(full, true);
+    return full;
+  }
+
+  function splitTitle(full) {
+    const i = full.indexOf("\n");
+    if (i === -1) return { title: "A FarmQuest Story", body: full.trim() };
+    return { title: full.slice(0, i).trim().replace(/^#+\s*/, ""), body: full.slice(i).trim() };
+  }
+
+  function renderStory(full, done) {
+    const parts = splitTitle(full);
+    $("storyTitle").textContent = parts.title;
+    $("storyText").textContent = parts.body;
+    $("storyText").classList.toggle("done", !!done);
+    if (done) { state.story = parts.body; state.title = parts.title; }
+  }
+
+  /* ---------- TTS ---------- */
+  async function synthesize(text, voice) {
+    const res = await fetch(OPENAI + "/audio/speech", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + getKey() },
+      body: JSON.stringify({
+        model: "gpt-4o-mini-tts",
+        voice: voice,
+        input: text.slice(0, 4000),
+        response_format: "mp3",
+        instructions: "You are an entertaining storyteller narrating an adventure to a teenage student. Warm, lively, expressive — vary your pacing, lean into the fun moments, keep it friendly and clear. Not babyish."
+      })
+    });
+    if (!res.ok) throw await apiError(res);
+    return await res.blob();
+  }
+
+  function loadAudio(blob) {
+    if (state.audioUrl) URL.revokeObjectURL(state.audioUrl);
+    state.audioUrl = URL.createObjectURL(blob);
+    state.audio = new Audio(state.audioUrl);
+    const a = state.audio;
+    a.addEventListener("timeupdate", () => {
+      $("audioProg").value = a.duration ? a.currentTime / a.duration : 0;
+      $("audioTime").textContent = fmt(a.currentTime) + " / " + fmt(a.duration);
+    });
+    a.addEventListener("ended", () => { $("playBtn").textContent = "▶"; });
+    a.addEventListener("loadedmetadata", () => { $("audioTime").textContent = "0:00 / " + fmt(a.duration); });
+    $("audioBar").classList.add("show");
+    $("replayBtn").disabled = false;
+  }
+
+  const playPause = () => {
+    const a = state.audio;
+    if (!a) return;
+    if (a.paused) { a.play(); $("playBtn").textContent = "⏸"; }
+    else { a.pause(); $("playBtn").textContent = "▶"; }
+  };
+  $("playBtn").addEventListener("click", playPause);
+  $("replayBtn").addEventListener("click", () => {
+    const a = state.audio;
+    if (!a) return;
+    a.currentTime = 0;
+    a.play();
+    $("playBtn").textContent = "⏸";
+  });
+
+  /* ---------- shelf (localStorage) ---------- */
+  const loadShelf = () => JSON.parse(localStorage.getItem("fq_shelf") || "[]");
+  function saveToShelf(entry) {
+    const shelf = loadShelf();
+    shelf.unshift(entry);
+    localStorage.setItem("fq_shelf", JSON.stringify(shelf.slice(0, 12)));
+    renderShelf();
+  }
+  function renderShelf() {
+    const shelf = loadShelf();
+    const box = $("shelf");
+    if (!shelf.length) {
+      box.innerHTML = '<p id="shelfEmpty">Stories you generate are saved here (in this browser) so you can read and replay them later.</p>';
+      return;
+    }
+    box.innerHTML = "";
+    shelf.forEach((s, i) => {
+      const row = document.createElement("div");
+      row.className = "shelf-item";
+      row.innerHTML = '<div><div class="t"></div><div class="m"></div></div>';
+      row.querySelector(".t").textContent = s.title;
+      row.querySelector(".m").textContent = "for " + s.name + " · " + new Date(s.at).toLocaleDateString();
+      const btn = document.createElement("button");
+      btn.textContent = "▶ Read & replay";
+      btn.addEventListener("click", () => reopenStory(i));
+      row.appendChild(btn);
+      box.appendChild(row);
+    });
+  }
+  async function reopenStory(i) {
+    const s = loadShelf()[i];
+    if (!s) return;
+    $("storyCard").style.display = "block";
+    clearErr($("storyErr"));
+    renderStory(s.title + "\n\n" + s.body, true);
+    $("storyCard").scrollIntoView({ behavior: "smooth" });
+    $("audioBar").classList.remove("show");
+    $("replayBtn").disabled = true;
+    if (state.audio) { state.audio.pause(); $("playBtn").textContent = "▶"; }
+    if (!getKey()) { setStatus("Saved story · add your API key to re-narrate", false); return; }
+    try {
+      setStatus("Re-narrating…", true);
+      loadAudio(await synthesize(s.title + ".\n" + s.body, $("voice").value));
+      setStatus("Ready · press play", false);
+    } catch (e) {
+      setStatus("Saved story", false);
+      showErr($("storyErr"), "Narration failed: " + e.message);
+    }
+  }
+  renderShelf();
+
+  /* ---------- main flow ---------- */
+  $("newBtn").addEventListener("click", () => {
+    $("storyCard").style.display = "none";
+    if (state.audio) { state.audio.pause(); $("playBtn").textContent = "▶"; }
+    $("setupCard").scrollIntoView({ behavior: "smooth" });
+  });
+
+  $("goBtn").addEventListener("click", async () => {
+    if (state.busy) return;
+    clearErr($("setupErr"));
+    clearErr($("storyErr"));
+    const name = $("name").value.trim();
+    if (!name) return showErr($("setupErr"), "Please enter the student's first name.");
+    if (!getKey()) {
+      $("keyBox").open = true;
+      return showErr($("setupErr"), "Add your OpenAI API key (🔑 below) — it stays in this browser.");
+    }
+
+    state.busy = true;
+    $("goBtn").disabled = true;
+    if (state.audio) { state.audio.pause(); $("playBtn").textContent = "▶"; }
+    $("audioBar").classList.remove("show");
+    $("replayBtn").disabled = true;
+    $("storyTitle").textContent = "";
+    $("storyText").textContent = "";
+    $("storyText").classList.remove("done");
+    $("storyCard").style.display = "block";
+    $("storyCard").scrollIntoView({ behavior: "smooth" });
+    setStatus("Writing your story…", true);
+
+    try {
+      await generateStory(name, $("band").value, $("exp").value.trim());
+      saveToShelf({ title: state.title, body: state.story, name: name, at: Date.now() });
+      setStatus("Narrating…", true);
+      loadAudio(await synthesize(state.title + ".\n" + state.story, $("voice").value));
+      setStatus("Ready · press play", false);
+      state.audio.play().then(() => { $("playBtn").textContent = "⏸"; }).catch(() => { /* autoplay blocked — user presses play */ });
+    } catch (e) {
+      setStatus("Something went wrong", false);
+      showErr($("storyErr"), e.message);
+    } finally {
+      state.busy = false;
+      $("goBtn").disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>
