@@ -24,13 +24,15 @@ Story tone and content must remain appropriate and appealing for K-12 students, 
 
 ## 2. Problem Statement
 
+**The anchor problem — food insecurity is taught as a statistic, not an experience.** Per the USDA's final household food security report (2024 data, released Dec 2025), **14.1 million U.S. children live in food-insecure households** — roughly **1 in 5, or about 6 students in a typical class of 30** — and the number has risen for consecutive years. Yet food insecurity is taught as a textbook page: abstract to the students who don't live it, and quietly stigmatizing to the ones who do. Nothing connects what students *learn* about food systems to anything they can *do* about food access in their own community. (With the federal survey now discontinued, community-level awareness and local programs matter more, not less.)
+
 **For students:** Farm field trips are one of the few chances students in grades 6–12 get to see agriculture, food systems, and rural careers firsthand — but the visits are often passive walk-throughs. Students shuffle between stations, half-listen, and retain little. Middle and high schoolers in particular disengage from experiences that feel like they were designed for younger kids.
 
 **For teachers:** Teachers struggle to connect a one-day trip to their curriculum. Prep materials are generic or nonexistent, there's no structured activity during the visit, and post-trip reflection is usually a worksheet nobody enjoys. Building custom materials for a specific local farm is more work than most teachers can take on.
 
 **For farms:** Local farms that host school groups have no tools to make visits engaging or educational beyond a guided tour. A better visit experience means better relationships with schools and repeat bookings, but farms lack the time and expertise to create it.
 
-**The gap:** No existing product turns a real farm visit into a structured, narrative, curriculum-connected learning experience. Educational games are screen-only; field trip materials are paper-only. FarmQuest bridges the two: a story that starts in the classroom, physically unfolds across the farm, and concludes back in class.
+**The gap:** No existing product turns a real farm visit into a structured, narrative, curriculum-connected learning experience — and none connects that learning to student *action* on food access. Educational games are screen-only; field trip materials are paper-only; school gardens work (7,000+ nationwide, with trials like Texas Sprouts showing significant gains in vegetable consumption and science engagement) but arrive with no curriculum spine or momentum engine, so teachers struggle to start and sustain them. FarmQuest bridges all of it: a story that starts in the classroom, physically unfolds across the farm, concludes back in class — and, in the Grow-to-Give extension (§11), continues into a school garden where students grow real food for food-insecure neighbors, converting the anxiety of a topic 1-in-5 of them lives with into agency and contribution.
 
 ---
 
@@ -269,6 +271,7 @@ The pilot is free; success is measured in validation, not revenue.
 
 ## 11. Open Questions (post-pilot)
 
+- **Grow-to-Give (Phase 4 extension):** after the trip finale, the story continues into a class garden plot (school grounds, partner farm, or Parks & Rec land). Chapters unlock at growing milestones — planting day, first sprouts, harvest — instead of QR stations, and the arc culminates in a real donation to a local food bank or a community-pick plot, with the final chapter reporting the class's actual pounds donated. Closes the loop from learning about food insecurity to acting on it; converts anxiety into agency for the ~1-in-5 students who live the problem; gives teachers a story spine and momentum engine for a school garden. Pilot question: validate demand with teachers before building milestone-unlock mechanics.
 - Monetization: schools, farms, or both? Exit interviews in the pilot gather willingness-to-pay signals.
 - Should high-performing story packs become a reusable library (reducing generation cost to near zero)?
 - Farm self-service onboarding vs. staying concierge.
